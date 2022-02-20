@@ -15,10 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.7
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -31,16 +27,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: Cache python modules
-        uses: actions/cache@v2
-        env:
-          python-cache-name: cache-python-modules
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-build-${{ env.python-cache-name }}-${{ hashFiles('lambda/requirements.txt') }}
       - name: Install Dependencies
         run: |
-          make build.install.dependencies
+          make build.install.cdk
   deploy:
     needs: [build]
     runs-on: ubuntu-latest
